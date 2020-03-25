@@ -1,0 +1,13 @@
+package pcroom;
+
+public class Transaction {
+	private String transactiondate;
+	private String transactiontime;
+	private int totalmoney;
+	
+	
+	
+	
+	
+
+}
