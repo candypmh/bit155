@@ -4,7 +4,7 @@ package internetcafe.user;
 
 import java.util.*;
 /*
-* 클래스명 : ChargedTime // 시간충전을 위한 클래스
+* 클래스명 : Drink //음료수를 위한 클래스
 * 
 * 버전 정보 v.1.0
 * 
@@ -12,18 +12,9 @@ import java.util.*;
 * 
 * 작업자 : 박민혜
 */
-public class ChargedTime extends Product {
+public class Drink extends Product {
 
-    public ChargedTime() {
+    public Drink() {
     }
-    public int playtime;
-    
-	public int getPlaytime() {
-		return playtime;
-	}
-	public void setPlaytime(int playtime) {
-		this.playtime = playtime;
-	}
-
 
 }
