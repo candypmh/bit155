@@ -8,7 +8,7 @@ import java.util.*;
 * 
 * 마지막 업데이트 날짜 : 2020 - 03 - 25
 * 
-* 작업자 : 박민혜
+* 작업자 : 엄지희
 */
 public class Member extends Customer {
 
@@ -16,15 +16,39 @@ public class Member extends Customer {
 
 	}
 
-	private String name;
+	private String name;  //회원가입할때 이름 입력받으려고 
 
+	
+	
+	
 	public String getName() {
 		return name;
 	}
 
+	
+	
+	
+	
+	
 	public void setName(String name) {
-		this.name = name;
+		String regExp = "^[ㄱ-ㅎ가-힣]*$";
+		boolean bName = name.matches(regExp);
+		
+		while (true) {
+			if (bName == true) {
+				System.out.println(this.name = name);
+				break;
+			} else {
+				System.out.println("올바른 이름 형식이 아닙니다.");
+				break;
+			}
+		}
 	}
+	
+	
+	
+	
+	
 
 	@Override
 	public String toString() {
