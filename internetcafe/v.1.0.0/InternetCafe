@@ -15,7 +15,7 @@ import internetcafe.user.Product;
 * 
 * 버전 정보 v.1.0
 * 
-* 마지막 업데이트 날짜 : 2020 - 03 - 25
+* 마지막 업데이트 날짜 : 2020 - 03 - 26
 * 
 * 작업자 : 박민혜
 */
@@ -23,70 +23,242 @@ public class InternetCafe {
 
 	private static final int MAX_ROW_INDEX = 4;
 	private static final int MAX_COL_INDEX = 5;
-	private HashMap<String, Member> memberList;
-	private List<Nonmember> nonmemberList;
-	private List<Product> foodlist;
-	private Customer[][] seat;
+	private HashMap<String, Member> memberList; //선언만
+	private List<Nonmember> nonmemberList;		//선언만
+	private Customer[][] seat;					//선언만
+	private List<Product> foodlist;				//선언만
 	
-	public InternetCafe() {
-		this.memberList = new HashMap<String, Member>();
-		this.seat = new Customer[MAX_ROW_INDEX][MAX_COL_INDEX];
-		this.nonmemberList = new ArrayList<Nonmember>();
-		this.foodlist = new ArrayList<Product>();
+	Scanner sc = new Scanner(System.in);
+	
+	
+	public InternetCafe() { //생성자
+		this.memberList = new HashMap<String, Member>();		//생성
+		this.nonmemberList = new ArrayList<Nonmember>();		//생성
+		this.seat = new Customer[MAX_ROW_INDEX][MAX_COL_INDEX];	//생성
+		this.foodlist = new ArrayList<Product>();				//생성
 	}
+	
+	//처음 메인화면 ==========================================================
+	public void showMain() {
+		System.out.println("=====어서오세요 사조 피시방=====");
+		System.out.println("이용하시려면 아무키나 입력하세요: ");
+		String smInput = sc.nextLine(); //smInput: showMain Input이란 뜻
+		
+		if(smInput.equals("admin") == true) adminMenu(); //admin을 입력하면 관리자메뉴로 가세요
+		
+		showSeat(); //아무키나 입력하면 이제 좌석을 보여준다
+	}
+	
+	//좌석 보여주기==========================================================
+	//어차피 null로 생성되니까 굳이 초기화 해 줄 필요는 없다.
+	
+	public void showSeat() {
+		System.out.println("  -- 1 --- 2 --- 3 --- 4 --- 5 --");
+		
+		
+		for (int i = 0; i < this.seat.length; i++) {
+			System.out.printf("%d| ", i+1);
+			for (int j = 0; j < this.seat[i].length; j++) {
+				System.out.printf("[%s]", this.seat[i][j] == null ? "    " : "이용중");
+				
+			} //좌석의 값이 null인지? 맞으면 이용가능 : 차있으면 이용중                   
+			
+			System.out.println(); //보기 편하게 한 행(row)이 끝날때마다 엔터 
+		}
+		
+		selectSeat(); //좌석고르기 
 
-	public Member login(Scanner sc) {
-		System.out.println("아이디를입력하세요");
-		String id = sc.next();
-		System.out.println("비밀번호입력하세요");
-		String pwd = sc.next();
+	}
+	
+	//좌석 고르기==========================================================
+
+	private void selectSeat() {
+		
+		do {
+			try {
+				
+				System.out.println("좌석은 선택해주세요(ex. 1-3)>>");
+				String inputSeat = sc.nextLine();
+				String[] seatArr = inputSeat.trim().replace(" ", "").split("-");
+				//고객이 입력한 값의" "를 ""로 바꾸고, ","로 구분하겠다.
+				
+				int row = Integer.parseInt(seatArr[0])-1; //사용자가 입력한걸 배열의 인덱스로 바꿔야하니까
+				int col = Integer.parseInt(seatArr[1]);   //아까 숫자로 열 하나 추가했으니 이건 안빼줘도 됨
+				
+				if(row > MAX_ROW_INDEX || col > MAX_COL_INDEX) {
+					throw new Exception(); //배열을 벗어난 자리
+				}
+				
+				if(seat[row][col] == null) {  //seat[i][j]가 빈좌석일 때
+					System.out.println("좌석선택 완료");
+					selectCustomer(); //회원/비회원고르는 메서드
+					break;
+				
+				}else {
+					throw new Exception(); //이미 예약된 자리
+				}
+				
+
+			} catch (Exception e) {
+				System.out.println("좌석선택 실패 | 좌석을 다시 선택해주세요.");
+				System.out.println("좌석은 [1-1]부터 [4-5]까지만 존재합니다!");
+				System.out.println("================================");
+			}
+
+		} while (true);
+		
+	}
+	
+	// 회원/비회원 ==========================================================
+	
+	public void selectCustomer() {
+		while (true) {
+			System.out.println("1| 회원");
+			System.out.println("2| 비회원");
+			System.out.println("3| 종료");
+			
+			int scInput = Integer.parseInt(sc.nextLine());
+			
+			switch (scInput) {
+			case 1: selectMember();       //회원은 회원메뉴로
+				break;
+				
+			case 2: selectNonMember();    //비회원은 비회원메뉴로
+				break; 
+				
+			case 3: System.out.println("이용해주셔서 감사합니다.");
+				showMain();
+				break;
+
+			default: System.out.println("잘못된 메뉴입니다. 다시 입력해주세요!");
+				break;
+			}
+
+		}
+	}
+	
+	// 회원 ==========================================================
+
+	private void selectMember() {
+		login();
+		}
+		
+	// 회원 로그인==========================================================
+	
+	public Member login() {
+		System.out.println("아이디>> ");
+		String id = sc.nextLine();
+		System.out.println("비밀번호>> ");
+		String pwd = sc.nextLine();
+		
 		Member loginUser = memberList.get(id);
 		if (loginUser != null && loginUser.getId().equals(id) && loginUser.getPwd().equals(pwd)) {
-			System.out.println("로그인 되었습니다");
+			System.out.println("로그인 성공!");
 			return loginUser;
+			
+			//이제 시간선택 메서드로 넘어가야하는데 흐으으으으으으으으으으으으음
+			
 		} else {
 			System.out.println("잘못 입력 되었습니다 , 다시 입력해주세요");
 		}
 
 		return null;
 	}
+	
+	
+	// 비회원 ==========================================================
+	
+	private void selectNonMember() {
+		
+		while(true) {
+			System.out.println("1| 카드발급");  //카드번호는 온 순서대로!
+			System.out.println("2| 회원가입");
+			System.out.println("3|  종료");
+			
+			int snmInput = Integer.parseInt(sc.nextLine()); //selectNonMember의 Input이란 뜻임
+			
+			switch (snmInput) {
+			case 1: //카드발급 메서드...
+				break;
+				
+			case 2: signUp();
+				break;
+				
+			case 3: System.out.println("이용해주셔서 감사합니다.");
+				showMain();
+				break;
 
-	public void showMain() {
-	}
-
-	public void showSeat() {
-		for (int i = 0; i < this.seat.length; i++) {
-			for (int j = 0; j < this.seat[i].length; j++) {
-				System.out.printf("[%s]", this.seat[i][j] == null ? "이용가능" : "!이용중!");
+			default: System.out.println("잘못된 메뉴입니다. 다시 입력해주세요!");
+				break;
 			}
-			System.out.println();
+			
 		}
-
+		
 	}
+	
+	// 회원가입 ==========================================================
+	public void signUp() { //할수 있는사람이 ㅇ  아..정규표현식...흐으으으으음
+		
+		Member member = new Member();
+		
+		System.out.println("아이디>> ");
+		String idInput = sc.nextLine();
+		member.setId(idInput);
+		
+		System.out.println("비밀번호>> ");
+		member.setPwd(sc.nextLine());
+		
+		System.out.println("이름>>");
+		member.setName(sc.nextLine());
+		
+		memberList.put(member.getId(), member);
+		
+		System.out.println("회원가입이 완료되었습니다.");
+		login();
+	}	
+	
+	
+	
+	
+	
+	
+	
 
-	public void selectCustomer() {
-	}
 
-	public void selectSeat(Scanner sc) {
-	}
+
+
 
 	public void adminMenu() {
 	}
 
-	public void signUp(Scanner sc) { //할수 있는사람이 ㅇ
-		Member member = new Member();
-		System.out.println("아이디를 입력하세요");
-		member.setId(sc.next());
-		
-		System.out.println("비밀번호를 입력하세요");
-		member.setPwd(sc.next());
-		
-		System.out.println("이름을 입력하세요");
-		member.setName(sc.next());
-		
-		memberList.put(member.getId(), member);
-	}
+	
+	
+	
+	
+	
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public HashMap<String, Member> getmemberList() {
 		return memberList;
 	}
