@@ -1,48 +1,81 @@
 package internetcafe.product;
 
-
-
 import java.util.*;
+
+import javafx.scene.chart.PieChart.Data;
+
 /*
 * 클래스명 : User // 유저에 대한 클래스
 * 
 * 버전 정보 v.1.0
 * 
-* 마지막 업데이트 날짜 : 2020 - 03 - 25
+* 마지막 업데이트 날짜 : 2020 - 03 - 26
 * 
 * 작업자 : 박민혜
 */
 public abstract class User {
+	private String id;
+	private String pwd;
+	private boolean log;
+
+	public abstract void logCheck();
 
 	public User() {
 	}
 
-	private String id;
-
-	private String pwd;
-
-	private boolean log;
-
-	public void logCheck() {
-		
-	}
-
+	
+	
+	
+	
+	//==============================================================
 	public String getId() {
 		return id;
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		String regExp = "^[a-zA-Z]{1}[a-zA-Z0-9] {5,11}$";
+		boolean bId = id.matches(regExp);
+		
+		while (true) {
+			if (bId== true) {
+				this.id = id;
+				break;
+			} else {
+				System.out.println("※ID는 영문 대소문자 또는 숫자 6~12자로 입력해주세요.");
+				break;
+			}
+		}
+
 	}
 
+	
+	
+	
+	//==============================================================
 	public String getPwd() {
 		return pwd;
 	}
 
 	public void setPwd(String pwd) {
-		this.pwd = pwd;
+		String regExp = "^[A-Z0-9_@./#&+-?~]*.{6,12}$";
+		boolean bPwd = pwd.matches(regExp);
+		
+		while (true) {
+			if (bPwd == true) {
+				System.out.println(this.pwd = pwd);
+				break;
+			} else {
+				System.out.println("※PWD는 영문 대소문자 또는 숫자 6~12자로 입력해주세요.");
+				break;
+			}
+		}
+		
+		
+		
 	}
 
+	
+	//==============================================================
 	public boolean isLog() {
 		return log;
 	}
