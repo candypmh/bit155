@@ -1,0 +1,42 @@
+package internetcafe;
+
+
+
+
+
+/*
+* 클래스명 : Main  //메인
+* 
+* 버전 정보 v.1.0.1
+* 
+* 마지막 업데이트 날짜 : 2020 - 03 - 26
+* 
+* 작업자 : 박민혜
+*/
+
+
+public class Main {
+
+	public static void main(String[] args) {
+	
+		
+		do {
+			try {
+				Display dp = new Display();
+				dp.showMain();
+//				Scanner sc = new Scanner(System.in);
+				
+			} catch (Exception e) {
+				e.getStackTrace();
+				System.out.println(e.getMessage());
+			}
+		} while (true);
+		
+		
+	
+//		internetCafe.signUp(sc);
+//		System.out.println(internetCafe.getmemberList());
+		
+	}
+
+}
